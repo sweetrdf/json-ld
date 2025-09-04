@@ -23,7 +23,7 @@ use ML\JsonLD\RdfConstants;
  *
  * @author Markus Lanthaler <mail@markus-lanthaler.com>
  */
-class GraphTest extends \PHPUnit_Framework_TestCase
+class GraphTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The graph instance being used throughout the tests.
@@ -40,7 +40,7 @@ class GraphTest extends \PHPUnit_Framework_TestCase
     /**
      * Create the graph to test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $json = <<<JSON_LD_DOCUMENT
 {

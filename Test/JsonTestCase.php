@@ -12,12 +12,12 @@ namespace ML\JsonLD\Test;
 /**
  * A JSON Test Case
  *
- * This class extends {@link \PHPUnit_Framework_TestCase} with an assertion
+ * This class extends {@link \PHPUnit\Framework\TestCase} with an assertion
  * to compare JSON.
  *
  * @author Markus Lanthaler <mail@markus-lanthaler.com>
  */
-abstract class JsonTestCase extends \PHPUnit_Framework_TestCase
+abstract class JsonTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Asserts that two JSON structures are equal.

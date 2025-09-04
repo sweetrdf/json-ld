@@ -17,7 +17,7 @@ use ML\JsonLD\Document;
  *
  * @author Markus Lanthaler <mail@markus-lanthaler.com>
  */
-class DocumentTest extends \PHPUnit_Framework_TestCase
+class DocumentTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * The document instance being used throughout the tests.
@@ -29,7 +29,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     /**
      * Create the document to test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->document = JsonLD::getDocument(
             dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'dataset.jsonld',

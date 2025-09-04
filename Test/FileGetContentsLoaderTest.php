@@ -15,14 +15,14 @@ use ML\JsonLD\FileGetContentsLoader;
 /**
  * Test the parsing of a JSON-LD document into a Document.
  */
-class FileGetContentsLoaderTest extends \PHPUnit_Framework_TestCase
+class FileGetContentsLoaderTest extends \PHPUnit\Framework\TestCase
 {
 
     protected $iri;
 
     protected $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -30,7 +30,7 @@ class FileGetContentsLoaderTest extends \PHPUnit_Framework_TestCase
         $this->loader = new FileGetContentsLoader;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($iri);
         unset($this->loader);

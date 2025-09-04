@@ -17,7 +17,7 @@ use ML\JsonLD\NQuads;
  *
  * @author Markus Lanthaler <mail@markus-lanthaler.com>
  */
-class NQuadsTest extends \PHPUnit_Framework_TestCase
+class NQuadsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests that parsing an invalid NQuad file fails

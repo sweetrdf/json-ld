@@ -9,6 +9,7 @@
 
 namespace ML\JsonLD\Test;
 
+use ML\JsonLD\Exception\JsonLdException;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\NQuads;
 use ML\JsonLD\Test\TestManifestIterator;
@@ -23,35 +24,14 @@ use ML\JsonLD\Test\TestManifestIterator;
 class W3CTestSuiteTest extends JsonTestCase
 {
     /**
-     * The base directory from which the test manifests, input, and output
-     * files should be read.
-     */
-    private $basedir;
-
-    /**
      * The URL corresponding to the base directory
      */
-    private $baseurl = 'http://json-ld.org/test-suite/tests/';
+    public static string $baseurl = 'https://w3c.github.io/json-ld-api/tests/';
 
     /**
      * @var string The test's ID.
      */
     private $id;
-
-    /**
-     * Constructs a test case with the given name.
-     *
-     * @param null|string $name
-     * @param array  $data
-     * @param string $dataName
-     */
-    public function __construct($name = null, array $data = array(), $dataName = '')
-    {
-        $this->id = $dataName;
-
-        parent::__construct($name, $data, $dataName);
-        $this->basedir = dirname(__FILE__) . '/../vendor/json-ld/tests/';
-    }
 
     /**
      * Returns the test identifier.
@@ -60,7 +40,7 @@ class W3CTestSuiteTest extends JsonTestCase
      */
     public function getTestId()
     {
-        return $this->id;
+        return '';  // TODO: Fix test ID functionality if needed
     }
 
     /**
@@ -75,8 +55,8 @@ class W3CTestSuiteTest extends JsonTestCase
      */
     public function testExpansion($name, $test, $options)
     {
-        $expected = json_decode(file_get_contents($this->basedir . $test->{'expect'}));
-        $result = JsonLD::expand($this->basedir . $test->{'input'}, $options);
+        $expected = json_decode(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'expect'}));
+        $result = JsonLD::expand(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'input'}, $options);
 
         $this->assertJsonEquals($expected, $result);
     }
@@ -84,11 +64,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides expansion test cases.
      */
-    public function expansionProvider()
+    public static function expansionProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'expand-manifest.jsonld',
-            $this->baseurl . 'expand-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/expand-manifest.jsonld',
+            static::$baseurl . 'expand-manifest.jsonld'
         );
     }
 
@@ -104,10 +84,10 @@ class W3CTestSuiteTest extends JsonTestCase
      */
     public function testCompaction($name, $test, $options)
     {
-        $expected = json_decode(file_get_contents($this->basedir . $test->{'expect'}));
+        $expected = json_decode(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'expect'}));
         $result = JsonLD::compact(
-            $this->basedir . $test->{'input'},
-            $this->basedir . $test->{'context'},
+            __DIR__ . '/../vendor/json-ld/tests/' . $test->{'input'},
+            __DIR__ . '/../vendor/json-ld/tests/' . $test->{'context'},
             $options
         );
 
@@ -118,11 +98,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides compaction test cases.
      */
-    public function compactionProvider()
+    public static function compactionProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'compact-manifest.jsonld',
-            $this->baseurl . 'compact-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/compact-manifest.jsonld',
+            static::$baseurl . 'compact-manifest.jsonld'
         );
     }
 
@@ -138,12 +118,12 @@ class W3CTestSuiteTest extends JsonTestCase
      */
     public function testFlatten($name, $test, $options)
     {
-        $expected = json_decode(file_get_contents($this->basedir . $test->{'expect'}));
+        $expected = json_decode(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'expect'}));
         $context = (isset($test->{'context'}))
-            ? $this->basedir . $test->{'context'}
+            ? __DIR__ . '/../vendor/json-ld/tests/' . $test->{'context'}
             : null;
 
-        $result = JsonLD::flatten($this->basedir . $test->{'input'}, $context, $options);
+        $result = JsonLD::flatten(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'input'}, $context, $options);
 
         $this->assertJsonEquals($expected, $result);
     }
@@ -151,11 +131,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides flattening test cases.
      */
-    public function flattenProvider()
+    public static function flattenProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'flatten-manifest.jsonld',
-            $this->baseurl . 'flatten-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/flatten-manifest.jsonld',
+            static::$baseurl . 'flatten-manifest.jsonld'
         );
     }
 
@@ -172,14 +152,15 @@ class W3CTestSuiteTest extends JsonTestCase
     public function testRemoteDocumentLoading($name, $test, $options)
     {
         if (in_array('jld:NegativeEvaluationTest', $test->{'@type'})) {
-            $this->setExpectedException('ML\JsonLD\Exception\JsonLdException', null, $test->{'expect'});
+            $this->expectException(JsonLdException::class);
+            $this->expectExceptionMessage($test->{'expect'});
         } else {
-            $expected = json_decode($this->replaceBaseUrl(file_get_contents($this->basedir . $test->{'expect'})));
+            $expected = json_decode($this->replaceBaseUrl(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'expect'})));
         }
 
         unset($options->base);
 
-        $result = JsonLD::expand($this->replaceBaseUrl($this->baseurl . $test->{'input'}), $options);
+        $result = JsonLD::expand($this->replaceBaseUrl(static::$baseurl . $test->{'input'}), $options);
 
         if (isset($expected)) {
             $this->assertJsonEquals($expected, $result);
@@ -189,11 +170,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides remote document loading test cases.
      */
-    public function remoteDocumentLoadingProvider()
+    public static function remoteDocumentLoadingProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'remote-doc-manifest.jsonld',
-            $this->baseurl . 'remote-doc-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/remote-doc-manifest.jsonld',
+            static::$baseurl . 'remote-doc-manifest.jsonld'
         );
     }
 
@@ -207,7 +188,8 @@ class W3CTestSuiteTest extends JsonTestCase
      *
      * @return string The input string with all occurrences of the old base URL replaced with the new HTTPS-based one.
      */
-    private function replaceBaseUrl($input) {
+    private function replaceBaseUrl(string $input): string 
+    {
         return str_replace('http://json-ld.org/', 'https://json-ld.org:443/', $input);
     }
 
@@ -221,13 +203,14 @@ class W3CTestSuiteTest extends JsonTestCase
      * @group errors
      * @dataProvider errorProvider
      */
-    public function testError($name, $test, $options)
+    public function testError($name, $test, $options): void
     {
-        $this->setExpectedException('ML\JsonLD\Exception\JsonLdException', null, $test->{'expect'});
+        $this->expectException(JsonLdException::class);
+        $this->expectExceptionMessage($test->{'expect'});
 
         JsonLD::flatten(
-            $this->basedir . $test->{'input'},
-            (isset($test->{'context'})) ? $this->basedir . $test->{'context'} : null,
+            __DIR__ . '/../vendor/json-ld/tests/' . $test->{'input'},
+            (isset($test->{'context'})) ? __DIR__ . '/../vendor/json-ld/tests/' . $test->{'context'} : null,
             $options
         );
     }
@@ -235,11 +218,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides error test cases.
      */
-    public function errorProvider()
+    public static function errorProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'error-manifest.jsonld',
-            $this->baseurl . 'error-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/error-manifest.jsonld',
+            static::$baseurl . 'error-manifest.jsonld'
         );
     }
 
@@ -275,10 +258,10 @@ class W3CTestSuiteTest extends JsonTestCase
             );
         }
 
-        $expected = json_decode(file_get_contents($this->basedir . $test->{'expect'}));
+        $expected = json_decode(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'expect'}));
         $result = JsonLD::frame(
-            $this->basedir . $test->{'input'},
-            $this->basedir . $test->{'frame'},
+            __DIR__ . '/../vendor/json-ld/tests/' . $test->{'input'},
+            __DIR__ . '/../vendor/json-ld/tests/' . $test->{'frame'},
             $options
         );
 
@@ -288,11 +271,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides framing test cases.
      */
-    public function framingProvider()
+    public static function framingProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'frame-manifest.jsonld',
-            $this->baseurl . 'frame-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/frame-manifest.jsonld',
+            static::$baseurl . 'frame-manifest.jsonld'
         );
     }
 
@@ -308,8 +291,8 @@ class W3CTestSuiteTest extends JsonTestCase
      */
     public function testToRdf($name, $test, $options)
     {
-        $expected = trim(file_get_contents($this->basedir . $test->{'expect'}));
-        $quads = JsonLD::toRdf($this->basedir . $test->{'input'}, $options);
+        $expected = trim(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'expect'}));
+        $quads = JsonLD::toRdf(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'input'}, $options);
 
         $serializer = new NQuads();
         $result = $serializer->serialize($quads);
@@ -325,11 +308,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides conversion to RDF quads test cases.
      */
-    public function toRdfProvider()
+    public static function toRdfProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'toRdf-manifest.jsonld',
-            $this->baseurl . 'toRdf-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/toRdf-manifest.jsonld',
+            static::$baseurl . 'toRdf-manifest.jsonld'
         );
     }
 
@@ -345,10 +328,10 @@ class W3CTestSuiteTest extends JsonTestCase
      */
     public function testFromRdf($name, $test, $options)
     {
-        $expected = json_decode(file_get_contents($this->basedir . $test->{'expect'}));
+        $expected = json_decode(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'expect'}));
 
         $parser = new NQuads();
-        $quads = $parser->parse(file_get_contents($this->basedir . $test->{'input'}));
+        $quads = $parser->parse(file_get_contents(__DIR__ . '/../vendor/json-ld/tests/' . $test->{'input'}));
 
         $result = JsonLD::fromRdf($quads, $options);
 
@@ -358,11 +341,11 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * Provides conversion to quads test cases.
      */
-    public function fromRdfProvider()
+    public static function fromRdfProvider(): TestManifestIterator
     {
         return new TestManifestIterator(
-            $this->basedir . 'fromRdf-manifest.jsonld',
-            $this->baseurl . 'fromRdf-manifest.jsonld'
+            __DIR__ . '/../vendor/json-ld/tests/fromRdf-manifest.jsonld',
+            static::$baseurl . 'fromRdf-manifest.jsonld'
         );
     }
 }

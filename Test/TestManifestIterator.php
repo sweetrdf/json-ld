@@ -101,13 +101,11 @@ class TestManifestIterator implements \Iterator
             $options->{'expandContext'} = $this->directory . $options->{'expandContext'};
         }
 
-        $test = array(
-            'name'    => $test->{'name'},
-            'test'    => $test,
-            'options' => $options
+        return array(
+            $test->{'name'},    // argument 0: $name
+            $test,              // argument 1: $test  
+            $options            // argument 2: $options
         );
-
-        return $test;
     }
 
     /**

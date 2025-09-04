@@ -17,7 +17,7 @@ use ML\JsonLD\TypedValue;
  *
  * @author Markus Lanthaler <mail@markus-lanthaler.com>
  */
-class ValueTest extends \PHPUnit_Framework_TestCase
+class ValueTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests LanguageTaggedString
