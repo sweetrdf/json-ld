@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
-         strict="true"
-         bootstrap="./Test/bootstrap.php">
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+    backupGlobals="false"
+    colors="true"
+    processIsolation="false"
+    stopOnFailure="false"
+    bootstrap="./Test/bootstrap.php"
+    cacheDirectory=".phpunit.cache"
+    failOnWarning="true"
+    failOnRisky="true"
+    failOnEmptyTestSuite="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutChangesToGlobalState="true">
 
     <testsuites>
         <testsuite name="JsonLD Test Suite">
@@ -16,59 +20,35 @@
         </testsuite>
     </testsuites>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+    <source>
+        <include>
             <directory>./</directory>
-            <exclude>
-                <directory>./Test</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+        <exclude>
+            <directory>./Test</directory>
+            <directory>./vendor</directory>
+        </exclude>
+    </source>
 
     <!-- Uncomment this section if you want to generate an EARL implementation report
-    <listeners>
-      <listener class="\ML\JsonLD\Test\EarlReportGenerator">
-        <arguments>
-          <array>
-            <element key="target">
-              <string>earl-report.jsonld</string>
-            </element>
-            <element key="project-name">
-              <string>JsonLD</string>
-            </element>
-            <element key="project-url">
-              <string>https://github.com/lanthaler/JsonLD</string>
-            </element>
-            <element key="project-homepage">
-              <string>https://github.com/lanthaler/JsonLD</string>
-            </element>
-            <element key="license-url">
-              <string>https://raw.github.com/lanthaler/JsonLD/master/LICENSE</string>
-            </element>
-            <element key="project-description">
-              <string>JSON-LD processor for PHP</string>
-            </element>
-            <element key="programming-language">
-              <string>PHP</string>
-            </element>
-            <element key="developer-name">
-              <string>Markus Lanthaler</string>
-            </element>
-            <element key="developer-url">
-              <string>http://me.markus-lanthaler.com</string>
-            </element>
-            <element key="developer-homepage">
-              <string>http://www.markus-lanthaler.com/</string>
-            </element>
-          </array>
-        </arguments>
-      </listener>
-    </listeners>
+    <extensions>
+        <bootstrap class="\ML\JsonLD\Test\EarlReportGenerator">
+            <parameter name="target" value="earl-report.jsonld"/>
+            <parameter name="project-name" value="JsonLD"/>
+            <parameter name="project-url" value="https://github.com/lanthaler/JsonLD"/>
+            <parameter name="project-homepage" value="https://github.com/lanthaler/JsonLD"/>
+            <parameter name="license-url" value="https://raw.github.com/lanthaler/JsonLD/master/LICENSE"/>
+            <parameter name="project-description" value="JSON-LD processor for PHP"/>
+            <parameter name="programming-language" value="PHP"/>
+            <parameter name="developer-name" value="Markus Lanthaler"/>
+            <parameter name="developer-url" value="http://me.markus-lanthaler.com"/>
+            <parameter name="developer-homepage" value="http://www.markus-lanthaler.com/"/>
+        </bootstrap>
+    </extensions>
     -->
 
     <logging>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" />
+        <junit outputFile="junit.xml"/>
     </logging>
 
 </phpunit>
