@@ -247,7 +247,7 @@ class JsonLdException extends \RuntimeException
      * @param null|string     $document The document that triggered the error
      * @param null|\Exception $previous The previous exception
      */
-    public function __construct($code, $message = null, $snippet = null, $document = null, \Exception $previous = null)
+    public function __construct($code, $message = null, $snippet = null, $document = null, ?\Exception $previous = null)
     {
         $this->code = $code;
         $this->document = $document;
