@@ -12,6 +12,7 @@ namespace ML\JsonLD\Test;
 use ML\JsonLD\Exception\JsonLdException;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\NQuads;
+use ML\JsonLD\Exception\JsonLdException;
 use ML\JsonLD\Test\TestManifestIterator;
 
 /**

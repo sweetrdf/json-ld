@@ -247,7 +247,7 @@ class JsonLdException extends \RuntimeException
      * @param null|string     $document The document that triggered the error
      * @param null|\Exception $previous The previous exception
      */
-    public function __construct($code, $message = null, $snippet = null, $document = null, \Exception $previous = null)
+    public function __construct($code, $message = null, $snippet = null, $document = null, ?\Exception $previous = null)
     {
         $this->code = $code;
         $this->document = $document;
@@ -287,7 +287,9 @@ class JsonLdException extends \RuntimeException
         $this->message = $this->rawMessage;
 
         $dot = false;
-        if ('.' === substr($this->message, -1)) {
+        if (null == $this->message) {
+            $this->message = '';
+        } elseif ('.' === substr($this->message, -1)) {
             $this->message = substr($this->message, 0, -1);
             $dot = true;
         }

@@ -56,7 +56,7 @@ class Quad
      *
      * @throws InvalidArgumentException If the object parameter has a wrong type
      */
-    public function __construct(IRI $subject, IRI $property, $object, IRI $graph = null)
+    public function __construct(IRI $subject, IRI $property, $object, ?IRI $graph = null)
     {
         $this->subject = $subject;
         $this->property = $property;
@@ -135,7 +135,7 @@ class Quad
      *
      * @param null|IRI $graph The graph
      */
-    public function setGraph(IRI $graph = null)
+    public function setGraph(?IRI $graph = null)
     {
         $this->graph = $graph;
     }

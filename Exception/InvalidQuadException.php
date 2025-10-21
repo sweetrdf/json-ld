@@ -32,7 +32,7 @@ class InvalidQuadException extends \RuntimeException
      * @param Quad      $quad     The quad
      * @param null|\Exception $previous The previous exception
      */
-    public function __construct($message, $quad, \Exception $previous = null)
+    public function __construct($message, $quad, ?\Exception $previous = null)
     {
         $this->quad = $quad;
 
