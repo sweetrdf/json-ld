@@ -9,23 +9,25 @@
 
 namespace ML\JsonLD\Test;
 
+use ML\JsonLD\Exception\InvalidQuadException;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\NQuads;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests NQuads
  *
  * @author Markus Lanthaler <mail@markus-lanthaler.com>
  */
-class NQuadsTest extends \PHPUnit_Framework_TestCase
+class NQuadsTest extends TestCase
 {
     /**
      * Tests that parsing an invalid NQuad file fails
-     *
-     * @expectedException \ML\JsonLD\Exception\InvalidQuadException
      */
     public function testInvalidParse()
     {
+        $this->expectException(InvalidQuadException::class);
+
         $nquads = new NQuads();
         $nquads->parse('Invalid NQuads file');
     }
@@ -73,33 +75,33 @@ class NQuadsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests that parsing fails for blank node labels beginning with "-"
-     *
-     * @expectedException \ML\JsonLD\Exception\InvalidQuadException
      */
     public function testParseBlankNodeDashAtTheBeginning()
     {
+        $this->expectException(InvalidQuadException::class);
+
         $nquads = new NQuads();
         $nquads->parse('_:-b1 <http://ex/1> "Test" .');
     }
 
     /**
      * Tests that parsing fails for blank node labels beginning with "."
-     *
-     * @expectedException \ML\JsonLD\Exception\InvalidQuadException
      */
     public function testParseBlankNodePeriodAtTheBeginning()
     {
+        $this->expectException(InvalidQuadException::class);
+
         $nquads = new NQuads();
         $nquads->parse('_:.b1 <http://ex/1> "Test" .');
     }
 
     /**
      * Tests that parsing fails for blank node labels ending with "."
-     *
-     * @expectedException \ML\JsonLD\Exception\InvalidQuadException
      */
     public function testParseBlankNodePeriodAtTheEnd()
     {
+        $this->expectException(InvalidQuadException::class);
+
         $nquads = new NQuads();
         $nquads->parse('_:b1. <http://ex/1> "Test" .');
     }

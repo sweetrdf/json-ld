@@ -9,6 +9,7 @@
 
 namespace ML\JsonLD\Test;
 
+use ML\JsonLD\Exception\JsonLdException;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\NQuads;
 use ML\JsonLD\Test\TestManifestIterator;
@@ -197,7 +198,8 @@ class W3CTestSuiteTest extends JsonTestCase
         }
 
         if (in_array('jld:NegativeEvaluationTest', $test->{'@type'})) {
-            $this->setExpectedException('ML\JsonLD\Exception\JsonLdException', null, $test->{'expect'});
+            $this->expectException(JsonLdException::class);
+            $this->expectExceptionMessage($test->{'expect'});
         } else {
             $expected = json_decode($this->replaceBaseUrl(file_get_contents($this->basedir . $test->{'expect'})));
         }
@@ -261,7 +263,8 @@ class W3CTestSuiteTest extends JsonTestCase
             $expected = 'loading remote context failed';
         }
 
-        $this->setExpectedException('ML\JsonLD\Exception\JsonLdException', null, $expected);
+        $this->expectException(JsonLdException::class);
+        $this->expectExceptionMessage($expected);
 
         JsonLD::flatten(
             $this->basedir . $test->{'input'},

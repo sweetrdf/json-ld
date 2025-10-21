@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "json-ld/tests": "1.0",
-        "phpunit/phpunit": "^5"
+        "phpunit/phpunit": "^9"
     },
     "autoload": {
         "psr-4": {
