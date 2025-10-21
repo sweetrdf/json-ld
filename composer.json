@@ -19,7 +19,7 @@
         "ml/iri": "^1.1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10"
+        "phpunit/phpunit": "^10||^11"
     },
     "autoload": {
         "psr-4": {
