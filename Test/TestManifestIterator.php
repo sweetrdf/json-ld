@@ -73,7 +73,7 @@ class TestManifestIterator implements \Iterator
      *
      * @return string The key of the current element
      */
-    public function key()
+    public function key(): mixed
     {
         return $this->url . $this->manifest->{'sequence'}[$this->key]->{'@id'};
     }
@@ -86,7 +86,7 @@ class TestManifestIterator implements \Iterator
      *
      * @throws Exception
      */
-    public function current()
+    public function current(): mixed
     {
         $test = $this->manifest->{'sequence'}[$this->key];
         $options = isset($test->{'option'})
