@@ -1,6 +1,8 @@
 name: Continuous integration
 
-on: push
+on:
+  pull_request:
+    types: [open]
 
 jobs:
   ci:
