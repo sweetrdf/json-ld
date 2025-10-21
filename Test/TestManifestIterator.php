@@ -9,6 +9,8 @@
 
 namespace ML\JsonLD\Test;
 
+use Exception;
+
 /**
  * TestManifestIterator reads a test manifest and returns the contained test
  * definitions.
@@ -81,6 +83,8 @@ class TestManifestIterator implements \Iterator
      *
      * @return array Returns an array containing the name of the test and the
      *                test definition object.
+     *
+     * @throws Exception
      */
     public function current()
     {
@@ -99,6 +103,31 @@ class TestManifestIterator implements \Iterator
 
         if (isset($options->{'expandContext'}) && (false === strpos($options->{'expandContext'}, ':'))) {
             $options->{'expandContext'} = $this->directory . $options->{'expandContext'};
+        }
+
+        /*
+         * This code in the if-clause fixes at least the following tests of the W3C test suite:
+         *
+         * - remote-doc-manifest.jsonld#t0011
+         *
+         * Tests failed because context was not provided properly. The following code extracts
+         * the context file and loads it into the options object. Later on the value of
+         * expandContext is being merged into the active context.
+         */
+        if (
+            isset($options->httpLink)
+            && is_string($options->httpLink)
+            && 1 === preg_match('/<(.*?)>/', $options->httpLink, $match)
+            && isset($match[1])
+        ) {
+            // TODO use a local file path
+            $linkToContextFile = 'https://jsonldtest.inspirito.de/test-suite/tests/'.$match[1];
+            $content = file_get_contents($linkToContextFile);
+            if (false === $content) {
+                throw new Exception('Could not context from URL: '. $linkToContextFile);
+            }
+
+            $options->expandContext = json_decode($content, false);
         }
 
         $test = array(
