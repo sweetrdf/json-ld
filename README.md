@@ -1,4 +1,4 @@
-JsonLD [![Continuous integration](https://github.com/lanthaler/JsonLD/actions/workflows/ci.yaml/badge.svg)](https://github.com/lanthaler/JsonLD/actions/workflows/ci.yaml)
+JsonLD [![Continuous integration](https://github.com/sweetrdf/json-ld/actions/workflows/ci.yaml/badge.svg)](https://github.com/lanthaler/sweetrdf/json-ld/actions/workflows/ci.yaml)
 ==============
 
 JsonLD is a fully conforming [JSON-LD](http://www.w3.org/TR/json-ld/)
@@ -33,7 +33,7 @@ require('vendor/autoload.php');
 ```
 
 Of course, you can also download JsonLD as
-[ZIP archive](https://github.com/lanthaler/JsonLD/releases) from Github.
+[ZIP archive](https://github.com/sweetrdf/json-ld/releases) from Github.
 
 JsonLD requires **PHP 8.1** or later.
 

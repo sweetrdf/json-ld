@@ -1,5 +1,5 @@
 {
-    "name": "ml/json-ld",
+    "name": "sweetrdf/json-ld",
     "type": "library",
     "description": "JSON-LD Processor for PHP",
     "keywords": [ "JSON-LD", "jsonld" ],
