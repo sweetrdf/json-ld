@@ -1,10 +1,10 @@
 {
-  "@context": "http://json-ld.org/test-suite/context.jsonld",
+  "@context": "http://localhost:8080/test-suite/context.jsonld",
   "@id": "",
   "@type": "mf:Manifest",
   "description": "JSON-LD to Expansion tests use object compare",
   "name": "Expansion",
-  "baseIri": "http://json-ld.org/test-suite/tests/",
+  "baseIri": "http://localhost:8080/test-suite/tests/",
   "sequence": [
     {
       "@id": "#t0001",

@@ -46,7 +46,7 @@
         "@id": "_:termAppendedToBlankNode"
       },
       {
-        "@id": "http://json-ld.org/test-suite/tests/relativeIri"
+        "@id": "http://localhost:8080/test-suite/tests/relativeIri"
       },
       {
         "@id": "_:term"

@@ -82,7 +82,7 @@ class TestManifestIterator implements \Iterator
      * Returns the current element.
      *
      * @return array Returns an array containing the name of the test and the
-     *                test definition object.
+     *               test definition object.
      *
      * @throws Exception
      */
@@ -113,6 +113,8 @@ class TestManifestIterator implements \Iterator
          * Tests failed because context was not provided properly. The following code extracts
          * the context file and loads it into the options object. Later on the value of
          * expandContext is being merged into the active context.
+         *
+         * For further information: https://github.com/lanthaler/JsonLD/pull/113#issuecomment-3426479583
          */
         if (
             isset($options->httpLink)
@@ -121,7 +123,7 @@ class TestManifestIterator implements \Iterator
             && isset($match[1])
         ) {
             // TODO use a local file path
-            $linkToContextFile = 'https://jsonldtest.inspirito.de/test-suite/tests/'.$match[1];
+            $linkToContextFile = 'http://localhost:8080/Test/json-ld-test-suite/'.$match[1];
             $content = file_get_contents($linkToContextFile);
             if (false === $content) {
                 throw new Exception('Could not context from URL: '. $linkToContextFile);

@@ -1,10 +1,10 @@
 {
-  "@context": "http://json-ld.org/test-suite/context.jsonld",
+  "@context": "http://localhost:8080/test-suite/context.jsonld",
   "@id": "",
   "@type": "mf:Manifest",
   "description": "JSON-LD to Expansion tests use object compare",
   "name": "Error handling",
-  "baseIri": "http://json-ld.org/test-suite/tests/",
+  "baseIri": "http://localhost:8080/test-suite/tests/",
   "sequence": [
     {
       "@id": "#t0001",
@@ -19,14 +19,14 @@
       "name": "A context may not include itself recursively (direct)",
       "purpose": "Verifies that an exception is raised on expansion when processing a context referencing itself",
       "input": "error-0002-in.jsonld",
-      "expect": "Loading http://json-ld.org/test-suite/tests/error-0002-in.jsonld failed"
+      "expect": "Loading http://localhost:8080/test-suite/tests/error-0002-in.jsonld failed"
     }, {
       "@id": "#t0003",
       "@type": [ "jld:NegativeEvaluationTest", "jld:FlattenTest" ],
       "name": "A context may not include itself recursively (indirect)",
       "purpose": "Verifies that an exception is raised on expansion when processing a context referencing itself indirectly",
       "input": "error-0003-in.jsonld",
-      "expect": "Loading http://json-ld.org/test-suite/tests/error-0003-ctx.jsonld failed"
+      "expect": "Loading http://localhost:8080/test-suite/tests/error-0003-ctx.jsonld failed"
     }, {
       "@id": "#t0004",
       "@type": [ "jld:NegativeEvaluationTest", "jld:FlattenTest" ],
@@ -40,7 +40,7 @@
       "name": "Invalid remote context",
       "purpose": "Verifies that an exception is raised on expansion when a remote context is not an object containing @context",
       "input": "error-0005-in.jsonld",
-      "expect": "Loading http://json-ld.org/test-suite/tests/error-0005-in.jsonld failed"
+      "expect": "Loading http://localhost:8080/test-suite/tests/error-0005-in.jsonld failed"
     }, {
       "@id": "#t0006",
       "@type": [ "jld:NegativeEvaluationTest", "jld:FlattenTest" ],

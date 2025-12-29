@@ -13,6 +13,7 @@ use ML\JsonLD\Exception\JsonLdException;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\NQuads;
 use ML\JsonLD\Test\TestManifestIterator;
+use Symfony\Component\Process\Process;
 
 /**
  * The official W3C JSON-LD test suite.
@@ -30,12 +31,51 @@ class W3CTestSuiteTest extends JsonTestCase
     /**
      * The URL corresponding to the base directory
      */
-    private static $baseurl = 'https://jsonldtest.inspirito.de/test-suite/tests/';
+    private static $baseurl = 'http://localhost:8080/Test/json-ld-test-suite/';
 
     /**
      * @var string The test's ID.
      */
     private $id;
+
+    /**
+     * Holds the Symfony Process which represents a basic PHP webserver call.
+     */
+    public static Process $process;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$process = new Process(['php', '-S', 'localhost:8080']);
+        self::$process->start();
+
+        // do not stop server automatically after a certain amount of time
+        self::$process->setTimeout(null);
+
+        // Wait until server responds
+        $start = time();
+        $connected = false;
+
+        while (time() - $start < 5) {
+            $fp = @fsockopen('localhost', 8080);
+            if ($fp) {
+                fclose($fp);
+                $connected = true;
+                break;
+            }
+            usleep(50000);
+        }
+
+        if (false === $connected) {
+            $msg = 'Could not start PHP webserver in time. Error output: ';
+            $msg .= self::$process->getErrorOutput();
+            throw new \RuntimeException($msg);
+        }
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        self::$process->stop();
+    }
 
     /**
      * Returns the test identifier.
@@ -157,21 +197,24 @@ class W3CTestSuiteTest extends JsonTestCase
     {
         /*
          * There are a few failing tests and its not clear at the moment, if its because
-         * the library is buggy or the test related files are. Therefore skipping certain tests
+         * the library is buggy or the test related files were. Therefore skipping certain tests
          * but leaving a clear error message.
+         *
+         * For instance, the related manifest file references for t0007 the following files:
+         * - remote-doc-0007-in.jsonld
+         *
+         * But these files dont exist, neither in https://github.com/w3c/json-ld-api/tree/main/tests/remote-doc
+         * nor https://github.com/json-ld/tests.
+         *
+         * For more information: https://github.com/lanthaler/JsonLD/pull/113
          */
         $brokenTests = [
-            'Load JSON-LD through 301 redirect',
-            'Load JSON-LD through 303 redirect',
-            'Load JSON-LD through 307 redirect',
+            'Load JSON-LD through 301 redirect' => 'remote-doc: t0005',
+            'Load JSON-LD through 303 redirect' => 'remote-doc: t0006',
+            'Load JSON-LD through 307 redirect' => 'remote-doc: t0007',
         ];
-        if (in_array($name, $brokenTests)) {
-            $this->markTestSkipped('Manifest file references an input file which does not exist (name: '.$name.')');
-        }
-
-        if ('load JSON-LD document with link' === $name) {
-            $msg = 'TODO check if the test (t0009) itself is faulty or ';
-            $msg .= 'the fix for remote-doc-manifest.jsonld#t0011 in TestManifestIterator';
+        if (in_array($name, array_keys($brokenTests))) {
+            $msg = 'Manifest file references an input file which NEVER existed! Broken test name: '.$brokenTests[$name];
             $this->markTestSkipped($msg);
         }
 
@@ -191,7 +234,7 @@ class W3CTestSuiteTest extends JsonTestCase
              * Here is the related test output without the following code:
              *
              * 1) ML\JsonLD\Test\W3CTestSuiteTest::testRemoteDocumentLoading with data set
-             * "https://jsonldtest.inspirito.de/test-suite/tests/remote-doc-manifest.jsonld#t0004"
+             * "http://localhost:8080/Test/json-ld-test-suite/remote-doc-manifest.jsonld#t0004"
              * ('loading an unknown type raise...failed', stdClass Object (...), stdClass Object (...))
              *
              * Failed asserting that exception message 'Syntax error, malformed JSON.' contains 'loading document failed'.
@@ -214,11 +257,11 @@ class W3CTestSuiteTest extends JsonTestCase
              * Here is the related test output without the following code:
              *
              * 1) ML\JsonLD\Test\W3CTestSuiteTest::testRemoteDocumentLoading with data set
-             * "https://jsonldtest.inspirito.de/test-suite/tests/remote-doc-manifest.jsonld#t0008"
+             * "http://localhost:8080/Test/json-ld-test-suite/remote-doc-manifest.jsonld#t0008"
              * ('Non-existant file (404)', stdClass Object (...), stdClass Object ())
              *
              * Failed asserting that exception message 'Unable to load the remote document
-             * "https://jsonldtest.inspirito.de/test-suite/tests/remote-doc-0008-in.jsonld"
+             * "http://localhost:8080/Test/json-ld-test-suite/remote-doc-0008-in.jsonld"
              * (near ["HTTP/1.1 404 Not Found","Server: nginx","Date: Tue, 21 Oct 2025 12:30:48 GMT",
              * "Content-Type: text/html","Content-Length: 1022","Connection: close",
              * "Last-Modified: Mon, 24 Feb 2014 19:45:05 GMT","ETag: \"3fe-4f32c354a1240\"",
@@ -266,7 +309,7 @@ class W3CTestSuiteTest extends JsonTestCase
      * @deprecated TODO remove when introducing PHP8 support and releasing a new major version, because links are broken!
      */
     private function replaceBaseUrl($input) {
-        return str_replace('http://json-ld.org/', 'https://jsonldtest.inspirito.de/', $input);
+        return str_replace('http://json-ld.org/', 'http://localhost:8080/', $input);
     }
 
     /**

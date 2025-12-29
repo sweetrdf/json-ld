@@ -16,7 +16,7 @@
         "@value": "indexes"
       },
       {
-        "@id": "http://json-ld.org/test-suite/tests/asTheValueIsntAnObject"
+        "@id": "http://localhost:8080/test-suite/tests/asTheValueIsntAnObject"
       }
     ]
   }

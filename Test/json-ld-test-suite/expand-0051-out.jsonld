@@ -2,5 +2,5 @@
    "http://example.com/property": [{
       "@value": "ok"
    }],
-   "@id": "http://json-ld.org/issue/1"
+   "@id": "http://localhost:8080/issue/1"
 }]

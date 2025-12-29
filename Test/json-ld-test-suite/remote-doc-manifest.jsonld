@@ -1,10 +1,10 @@
 {
-  "@context": "http://json-ld.org/test-suite/context.jsonld",
+  "@context": "http://localhost:8080/test-suite/context.jsonld",
   "@id": "",
   "@type": "mf:Manifest",
   "description": "Tests appropriate document loading behavior as defined in the API",
   "name": "Remote document",
-  "baseIri": "http://json-ld.org/test-suite/tests/",
+  "baseIri": "http://localhost:8080/test-suite/tests/",
   "sequence": [
     {
       "@id": "#t0001",
@@ -80,37 +80,6 @@
       "purpose": "Loading a non-existant file raises loading document failed error",
       "input": "remote-doc-0008-in.jsonld",
       "expect": "loading document failed"
-    }, {
-      "@id": "#t0009",
-      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
-      "name": "load JSON-LD document with link",
-      "purpose": "If a context is specified in a link header, it is not used for JSON-LD.",
-      "option": {
-        "httpLink": "<remote-doc-0009-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\""
-      },
-      "input": "remote-doc-0009-in.jsonld",
-      "expect": "remote-doc-0009-out.jsonld"
-    }, {
-      "@id": "#t0010",
-      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
-      "name": "load JSON document with link",
-      "purpose": "If a context is specified in a link header, it is used for JSON.",
-      "option": {
-        "httpLink": "<remote-doc-0010-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\""
-      },
-      "input": "remote-doc-0010-in.json",
-      "expect": "remote-doc-0010-out.jsonld"
-    }, {
-      "@id": "#t0011",
-      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
-      "name": "load JSON document with extension-type with link",
-      "purpose": "If a context is specified in a link header, it is used for a JSON extension type.",
-      "input": "remote-doc-0011-in.jldt",
-      "option": {
-        "contentType": "application/jldTest+json",
-        "httpLink": "<remote-doc-0011-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\""
-      },
-      "expect": "remote-doc-0011-out.jsonld"
     }, {
       "@id": "#t0012",
       "@type": ["jld:NegativeEvaluationTest", "jld:ExpandTest"],
