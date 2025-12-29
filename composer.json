@@ -11,8 +11,17 @@
             "email": "mail@markus-lanthaler.com",
             "homepage": "http://www.markus-lanthaler.com",
             "role": "Developer"
+        },
+        {
+            "name": "Konrad Abicht",
+            "email": "hi@inspirito.de",
+            "homepage": "http://inspirito.de/",
+            "role": "Maintainer, Developer"
         }
     ],
+    "replace": {
+        "ml/json-ld":"1.2.*"
+    },
     "require": {
         "php": ">=8.1.0",
         "ext-json": "*",
