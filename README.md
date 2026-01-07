@@ -1,5 +1,14 @@
-JsonLD [![Continuous integration](https://github.com/sweetrdf/json-ld/actions/workflows/ci.yaml/badge.svg)](https://github.com/lanthaler/sweetrdf/json-ld/actions/workflows/ci.yaml)
-==============
+JsonLD (Fork)
+=============
+
+## About this fork 🚀
+
+This is a fork of JsonLD which I maintain in my spare time. 
+My objective is to keep it alive and usable on latest PHP versions.
+Code is more or less maintained but not developed any further.
+If you wanna participate, feel free to open a pull request!
+
+---
 
 JsonLD is a fully conforming [JSON-LD](http://www.w3.org/TR/json-ld/)
 processor written in PHP. It is extensively tested and passes the
