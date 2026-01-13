@@ -3,7 +3,7 @@
 > [!NOTE]
 > **This is a fork of the 
 > [Original JsonLD](https://github.com/lanthaler/JsonLD)** library 
-> written by [Markus Lanthaler](https://github.com/lanthaler/JsonLD).
+> written by [Markus Lanthaler](https://github.com/lanthaler).
 > I maintain it in my spare time to keep it alive and usable on the latest PHP versions.
 > Code is more or less maintained but not developed any further.
 > If you wanna participate, feel free to open a pull request!
