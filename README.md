@@ -27,10 +27,10 @@ JsonLD supports [framing](http://json-ld.org/spec/latest/json-ld-framing/)
 
 JsonLD requires **PHP 8.1** or later.
 
-The easiest way to install `JsonLD` is by requiring it with [Composer](https://getcomposer.org/).
+The easiest way to install **JsonLD** is by requiring it with [Composer](https://getcomposer.org/).
 
 ```
-composer require ml/json-ld
+composer require sweetrdf/json-ld
 ```
 
 Of course, you can also download JsonLD as
