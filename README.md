@@ -1,14 +1,12 @@
-JsonLD (Fork)
-=============
+# JsonLD (Fork)
 
-## About this fork 🚀
-
-This is a fork of JsonLD which I maintain in my spare time. 
-My objective is to keep it alive and usable on latest PHP versions.
-Code is more or less maintained but not developed any further.
-If you wanna participate, feel free to open a pull request!
-
----
+> [!NOTE]
+> **This is a fork of the 
+> [Original JsonLD](https://github.com/lanthaler/JsonLD)** library 
+> written by [Markus Lanthaler](https://github.com/lanthaler/JsonLD).
+> I maintain it in my spare time to keep it alive and usable on the latest PHP versions.
+> Code is more or less maintained but not developed any further.
+> If you wanna participate, feel free to open a pull request!
 
 JsonLD is a fully conforming [JSON-LD](http://www.w3.org/TR/json-ld/)
 processor written in PHP. It is extensively tested and passes the
@@ -25,9 +23,9 @@ JsonLD supports [framing](http://json-ld.org/spec/latest/json-ld-framing/)
 [named graphs](https://github.com/json-ld/json-ld.org/issues/118)) and an experimental
 [object-oriented interface for JSON-LD documents](https://github.com/lanthaler/JsonLD/issues/15).
 
+## Installation
 
-Installation
-------------
+JsonLD requires **PHP 8.1** or later.
 
 The easiest way to install `JsonLD` is by requiring it with [Composer](https://getcomposer.org/).
 
@@ -35,20 +33,10 @@ The easiest way to install `JsonLD` is by requiring it with [Composer](https://g
 composer require ml/json-ld
 ```
 
-... and including Composer's autoloader to your project
-
-```php
-require('vendor/autoload.php');
-```
-
 Of course, you can also download JsonLD as
 [ZIP archive](https://github.com/sweetrdf/json-ld/releases) from Github.
 
-JsonLD requires **PHP 8.1** or later.
-
-
-Usage
-------------
+## Usage
 
 The library supports the official [JSON-LD API](http://www.w3.org/TR/json-ld-api/) as
 well as a object-oriented interface for JSON-LD documents (not fully implemented yet,
@@ -105,9 +93,3 @@ $node->getReverseProperty('http://example.com/vocab/link');
 // serialize the graph and convert it to a string
 $serialized = JsonLD::toString($graph->toJsonLd());
 ```
-
-
-Commercial Support
-------------
-
-Commercial support is available on request.
