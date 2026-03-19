@@ -13,6 +13,8 @@ use ML\JsonLD\Exception\JsonLdException;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\NQuads;
 use ML\JsonLD\Test\TestManifestIterator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Process\Process;
 
 /**
@@ -93,10 +95,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group expansion
-     * @dataProvider expansionProvider
      */
+    #[Group('expansion')]
+    #[DataProvider('expansionProvider')]
     public function testExpansion($name, $test, $options)
     {
         $expected = json_decode(file_get_contents(self::$basedir . $test->{'expect'}));
@@ -122,10 +123,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group compaction
-     * @dataProvider compactionProvider
      */
+    #[Group('compaction')]
+    #[DataProvider('compactionProvider')]
     public function testCompaction($name, $test, $options)
     {
         $expected = json_decode(file_get_contents(self::$basedir . $test->{'expect'}));
@@ -137,7 +137,6 @@ class W3CTestSuiteTest extends JsonTestCase
 
         $this->assertJsonEquals($expected, $result);
     }
-
 
     /**
      * Provides compaction test cases.
@@ -156,10 +155,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group flattening
-     * @dataProvider flattenProvider
      */
+    #[Group('flattening')]
+    #[DataProvider('flattenProvider')]
     public function testFlatten($name, $test, $options)
     {
         $expected = json_decode(file_get_contents(self::$basedir . $test->{'expect'}));
@@ -189,10 +187,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group remote
-     * @dataProvider remoteDocumentLoadingProvider
      */
+    #[Group('remote')]
+    #[DataProvider('remoteDocumentLoadingProvider')]
     public function testRemoteDocumentLoading($name, $test, $options)
     {
         /*
@@ -318,10 +315,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group errors
-     * @dataProvider errorProvider
      */
+    #[Group('errors')]
+    #[DataProvider('errorProvider')]
     public function testError($name, $test, $options)
     {
         $this->expectException(JsonLdException::class);
@@ -351,10 +347,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group framing
-     * @dataProvider framingProvider
      */
+    #[Group('framing')]
+    #[DataProvider('framingProvider')]
     public function testFraming($name, $test, $options)
     {
         $ignoredTests = array(
@@ -404,10 +399,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group toRdf
-     * @dataProvider toRdfProvider
      */
+    #[Group('toRdf')]
+    #[DataProvider('toRdfProvider')]
     public function testToRdf($name, $test, $options)
     {
         $expected = trim(file_get_contents(self::$basedir . $test->{'expect'}));
@@ -441,10 +435,9 @@ class W3CTestSuiteTest extends JsonTestCase
      * @param string $name    The test name.
      * @param object $test    The test definition.
      * @param object $options The options to configure the algorithms.
-     *
-     * @group fromRdf
-     * @dataProvider fromRdfProvider
      */
+    #[Group('fromRdf')]
+    #[DataProvider('fromRdfProvider')]
     public function testFromRdf($name, $test, $options)
     {
         $expected = json_decode(file_get_contents(self::$basedir . $test->{'expect'}));
