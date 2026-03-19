@@ -1,20 +1,13 @@
-name: Continuous integration
+name: Continuous Integration
 
-on:
-  push:
-    branches:
-    - "**"
-  pull_request:
-    branches:
-    - master
-    - php8
+on: push
 
 jobs:
   ci:
     runs-on: ubuntu-latest
 
     env:
-      extensions: intl, mbstring, xdebug
+      extensions: mbstring
 
     strategy:
       matrix:
@@ -32,11 +25,10 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           extensions: "${{ env.extensions }}"
           ini-values: "memory_limit=-1, error_reporting=E_ALL, display_errors=On"
-          coverage: xdebug
           tools: composer
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download dependencies
-        run: composer update --no-interaction --no-progress
+        run: composer update --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-audit --no-scripts
       - name: Run tests
         run: vendor/bin/phpunit
