@@ -39,7 +39,7 @@
         "contentType": "application/jldTest"
       },
       "input": "remote-doc-0004-in.jldte",
-      "expect": "loading document failed"
+      "expect": "Invalid media type"
     }, {
       "@id": "#t0005",
       "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
@@ -79,7 +79,38 @@
       "name": "Non-existant file (404)",
       "purpose": "Loading a non-existant file raises loading document failed error",
       "input": "remote-doc-0008-in.jsonld",
-      "expect": "loading document failed"
+      "expect": "Unable to load the remote document"
+    }, {
+      "@id": "#t0009",
+      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
+      "name": "load JSON-LD document with link",
+      "purpose": "If a context is specified in a link header, it is not used for JSON-LD.",
+      "option": {
+        "httpLink": "<remote-doc-0009-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\""
+      },
+      "input": "remote-doc-0009-in.jsonld",
+      "expect": "remote-doc-0009-out.jsonld"
+    }, {
+      "@id": "#t0010",
+      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
+      "name": "load JSON document with link",
+      "purpose": "If a context is specified in a link header, it is used for JSON.",
+      "option": {
+        "httpLink": "<remote-doc-0010-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\""
+      },
+      "input": "remote-doc-0010-in.json",
+      "expect": "remote-doc-0010-out.jsonld"
+    }, {
+      "@id": "#t0011",
+      "@type": ["jld:PositiveEvaluationTest", "jld:ExpandTest"],
+      "name": "load JSON document with extension-type with link",
+      "purpose": "If a context is specified in a link header, it is used for a JSON extension type.",
+      "input": "remote-doc-0011-in.jldt",
+      "option": {
+        "contentType": "application/jldTest+json",
+        "httpLink": "<remote-doc-0011-context.jsonld>; rel=\"http://www.w3.org/ns/json-ld#context\""
+      },
+      "expect": "remote-doc-0011-out.jsonld"
     }, {
       "@id": "#t0012",
       "@type": ["jld:NegativeEvaluationTest", "jld:ExpandTest"],
@@ -92,7 +123,7 @@
         ]
       },
       "input": "remote-doc-0012-in.json",
-      "expect": "multiple context link headers"
+      "expect": "multiple contexts in HTTP Link headers"
     }
   ]
 }

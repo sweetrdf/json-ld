@@ -47,7 +47,7 @@ class W3CTestSuiteTest extends JsonTestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$process = new Process(['php', '-S', 'localhost:8080']);
+        self::$process = new Process(['php', '-S', 'localhost:8080', 'Test/router.php']);
         self::$process->start();
 
         // do not stop server automatically after a certain amount of time
@@ -192,83 +192,10 @@ class W3CTestSuiteTest extends JsonTestCase
     #[DataProvider('remoteDocumentLoadingProvider')]
     public function testRemoteDocumentLoading($name, $test, $options)
     {
-        /*
-         * There are a few failing tests and its not clear at the moment, if its because
-         * the library is buggy or the test related files were. Therefore skipping certain tests
-         * but leaving a clear error message.
-         *
-         * For instance, the related manifest file references for t0007 the following files:
-         * - remote-doc-0007-in.jsonld
-         *
-         * But these files dont exist, neither in https://github.com/w3c/json-ld-api/tree/main/tests/remote-doc
-         * nor https://github.com/json-ld/tests.
-         *
-         * For more information: https://github.com/lanthaler/JsonLD/pull/113
-         */
-        $brokenTests = [
-            'Load JSON-LD through 301 redirect' => 'remote-doc: t0005',
-            'Load JSON-LD through 303 redirect' => 'remote-doc: t0006',
-            'Load JSON-LD through 307 redirect' => 'remote-doc: t0007',
-        ];
-        if (in_array($name, array_keys($brokenTests))) {
-            $msg = 'Manifest file references an input file which NEVER existed! Broken test name: '.$brokenTests[$name];
-            $this->markTestSkipped($msg);
-        }
-
-        if ('Multiple context link headers' === $name) {
-            $msg = 'Test remote-doc-manifest.jsonld#t0012 is broken.';
-            $msg .= ' It is expected that the test throws an exception because of multiple httpLink entries,';
-            $msg .= ' but that is not happening. I can not think of a serious way to implement/"trigger" this behavior.';
-            $this->markTestSkipped($msg);
-        }
-
         if (in_array('jld:NegativeEvaluationTest', $test->{'@type'})) {
             $expect = $test->{'expect'};
-
-            /*
-             * Adapts expected error message for the test > remote-doc-manifest.jsonld #t0004
-             *
-             * Here is the related test output without the following code:
-             *
-             * 1) ML\JsonLD\Test\W3CTestSuiteTest::testRemoteDocumentLoading with data set
-             * "http://localhost:8080/Test/json-ld-test-suite/remote-doc-manifest.jsonld#t0004"
-             * ('loading an unknown type raise...failed', stdClass Object (...), stdClass Object (...))
-             *
-             * Failed asserting that exception message 'Syntax error, malformed JSON.' contains 'loading document failed'.
-             *
-             * phpvfscomposer:///var/www/html/vendor/phpunit/phpunit/phpunit:106
-             */
-            if ('loading an unknown type raises loading document failed' === $name) {
-                $expect = 'Syntax error, malformed JSON.';
-            }
-
             $this->expectException(JsonLdException::class);
-
-            /*
-             * Adapts behavior for test remote-doc-manifest.jsonld #t0008
-             *
-             * The library put time-depended information in the error message which prevents us
-             * from comparing it to a static string. Instead we look for a certain part in the
-             * error message.
-             *
-             * Here is the related test output without the following code:
-             *
-             * 1) ML\JsonLD\Test\W3CTestSuiteTest::testRemoteDocumentLoading with data set
-             * "http://localhost:8080/Test/json-ld-test-suite/remote-doc-manifest.jsonld#t0008"
-             * ('Non-existant file (404)', stdClass Object (...), stdClass Object ())
-             *
-             * Failed asserting that exception message 'Unable to load the remote document
-             * "http://localhost:8080/Test/json-ld-test-suite/remote-doc-0008-in.jsonld"
-             * (near ["HTTP/1.1 404 Not Found","Server: nginx","Date: Tue, 21 Oct 2025 12:30:48 GMT",
-             * "Content-Type: text/html","Content-Length: 1022","Connection: close",
-             * "Last-Modified: Mon, 24 Feb 2014 19:45:05 GMT","ETag: \"3fe-4f32c354a1240\"",
-             * "Accept-Ranges: bytes"]).' contains 'loading document failed'.
-             */
-            if ('Non-existant file (404)' === $name) {
-                $this->expectExceptionMessageMatches('/Unable to load the remote document/');
-            } else {
-                $this->expectExceptionMessage($expect);
-            }
+            $this->expectExceptionMessage($expect);
         } else {
             $expected = json_decode($this->replaceBaseUrl(file_get_contents(self::$basedir . $test->{'expect'})));
         }
