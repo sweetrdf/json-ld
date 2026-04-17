@@ -55,7 +55,7 @@ class FileGetContentsLoader implements DocumentLoaderInterface
              *      call http_get_last_response_headers() instead.
              *
              * See: https://www.php.net/manual/de/function.http-get-last-response-headers
-             * 
+             *
              * On PHP 8.5 the deprecation persists even though the following code should avoid it.
              */
             $httpResponseHeader = null;

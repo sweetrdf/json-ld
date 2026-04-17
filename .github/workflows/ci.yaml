@@ -30,5 +30,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Download dependencies
         run: composer update --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-audit --no-scripts
+      - name: Start simple PHP webserver using router.php (required for tests)
+        run: php -S localhost:8080 Test/router.php &
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit --display-all-issues

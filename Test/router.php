@@ -1,4 +1,5 @@
 <?php
+
 if ($_SERVER['REQUEST_URI'] === '/Test/json-ld-test-suite/remote-doc-0005-in.jsonld') {
     header('Location: http://localhost:8080/Test/json-ld-test-suite/remote-doc-0001-in.jsonld');
     http_response_code(301);
@@ -12,7 +13,6 @@ if ($_SERVER['REQUEST_URI'] === '/Test/json-ld-test-suite/remote-doc-0005-in.jso
     http_response_code(307);
     return;
 }
-
 
 if ($_SERVER['REQUEST_URI'] === '/Test/json-ld-test-suite/remote-doc-0009-in.jsonld') {
     header('Link: <remote-doc-0009-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"');
