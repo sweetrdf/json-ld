@@ -46,18 +46,6 @@ class FileGetContentsLoader implements DocumentLoaderInterface
             ));
 
             $httpHeadersOffset = 0;
-
-            /*
-             * TODO: remove this if-clause when dropping 8.4.x support
-             * As of PHP 8.4.0 using $http_response_header is deprecated, related deprecation message:
-             *
-             *      The predefined locally scoped $http_response_header variable is deprecated,
-             *      call http_get_last_response_headers() instead.
-             *
-             * See: https://www.php.net/manual/de/function.http-get-last-response-headers
-             *
-             * On PHP 8.5 the deprecation persists even though the following code should avoid it.
-             */
             $httpResponseHeader = null;
 
             stream_context_set_params($context, array('notification' =>
@@ -199,7 +187,7 @@ class FileGetContentsLoader implements DocumentLoaderInterface
             }
         }
 
-        $contexts = $matches = array();
+        $matches = array();
         $trimWhitespaceCallback = function ($str) {
             return trim($str, "\"'  \n\t");
         };
