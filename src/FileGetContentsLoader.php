@@ -29,6 +29,10 @@ class FileGetContentsLoader implements DocumentLoaderInterface
         if (false === (isset($input[0]) && ("{" === $input[0]) || ("[" === $input[0]))) {
             $remoteDocument = new RemoteDocument($url);
 
+            if (function_exists('http_clear_last_response_headers')) {
+                http_clear_last_response_headers();
+            }
+
             $streamContextOptions = array(
               'method'  => 'GET',
               'header'  => "Accept: application/ld+json, application/json; q=0.9, */*; q=0.1\r\n"
@@ -42,25 +46,7 @@ class FileGetContentsLoader implements DocumentLoaderInterface
             ));
 
             $httpHeadersOffset = 0;
-
-            /*
-             * TODO: remove this if-clause when dropping 8.4.x support
-             * As of PHP 8.4.0 using $http_response_header is deprecated, related deprecation message:
-             *
-             *      The predefined locally scoped $http_response_header variable is deprecated,
-             *      call http_get_last_response_headers() instead.
-             *
-             * See: https://www.php.net/manual/de/function.http-get-last-response-headers
-             * 
-             * On PHP 8.5 the deprecation persists even though the following code should avoid it.
-             */
-            if (function_exists('http_get_last_response_headers')) {
-                $httpResponseHeader = http_get_last_response_headers();
-            } elseif (isset($http_response_header)) {
-                $httpResponseHeader = $http_response_header;
-            } else {
-                $httpResponseHeader = null;
-            }
+            $httpResponseHeader = null;
 
             stream_context_set_params($context, array('notification' =>
                 function ($code, $severity, $msg, $msgCode, $bytesTx, $bytesMax) use (
@@ -72,17 +58,34 @@ class FileGetContentsLoader implements DocumentLoaderInterface
                         $remoteDocument->documentUrl = $msg;
                         $remoteDocument->mediaType = null;
 
+                        if (function_exists('http_get_last_response_headers')) {
+                            $httpResponseHeader = http_get_last_response_headers();
+                        } elseif (isset($http_response_header)) {
+                            $httpResponseHeader = $http_response_header ?? null;
+                        }
+
                         $httpHeadersOffset = is_array($httpResponseHeader) ? count($httpResponseHeader) : 0;
                     }
                 }
             ));
 
             if (false === ($input = @file_get_contents($url, false, $context))) {
+                if (function_exists('http_get_last_response_headers')) {
+                    $httpResponseHeader = http_get_last_response_headers();
+                } elseif (isset($http_response_header)) {
+                    $httpResponseHeader = $http_response_header ?? null;
+                }
                 throw new JsonLdException(
                     JsonLdException::LOADING_DOCUMENT_FAILED,
                     sprintf('Unable to load the remote document "%s".', $url),
                     $httpResponseHeader
                 );
+            }
+
+            if (function_exists('http_get_last_response_headers')) {
+                $httpResponseHeader = http_get_last_response_headers();
+            } elseif (isset($http_response_header)) {
+                $httpResponseHeader = $http_response_header ?? null;
             }
 
             // Extract HTTP Link headers
@@ -184,7 +187,7 @@ class FileGetContentsLoader implements DocumentLoaderInterface
             }
         }
 
-        $contexts = $matches = array();
+        $matches = array();
         $trimWhitespaceCallback = function ($str) {
             return trim($str, "\"'  \n\t");
         };
