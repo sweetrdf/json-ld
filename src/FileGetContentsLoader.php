@@ -61,7 +61,7 @@ class FileGetContentsLoader implements DocumentLoaderInterface
                         if (function_exists('http_get_last_response_headers')) {
                             $httpResponseHeader = http_get_last_response_headers();
                         } elseif (isset($http_response_header)) {
-                            $httpResponseHeader = $http_response_header;
+                            $httpResponseHeader = $http_response_header ?? null;
                         }
 
                         $httpHeadersOffset = is_array($httpResponseHeader) ? count($httpResponseHeader) : 0;
@@ -73,7 +73,7 @@ class FileGetContentsLoader implements DocumentLoaderInterface
                 if (function_exists('http_get_last_response_headers')) {
                     $httpResponseHeader = http_get_last_response_headers();
                 } elseif (isset($http_response_header)) {
-                    $httpResponseHeader = $http_response_header;
+                    $httpResponseHeader = $http_response_header ?? null;
                 }
                 throw new JsonLdException(
                     JsonLdException::LOADING_DOCUMENT_FAILED,
@@ -85,7 +85,7 @@ class FileGetContentsLoader implements DocumentLoaderInterface
             if (function_exists('http_get_last_response_headers')) {
                 $httpResponseHeader = http_get_last_response_headers();
             } elseif (isset($http_response_header)) {
-                $httpResponseHeader = $http_response_header;
+                $httpResponseHeader = $http_response_header ?? null;
             }
 
             // Extract HTTP Link headers

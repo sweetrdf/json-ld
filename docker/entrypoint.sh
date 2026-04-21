@@ -13,6 +13,4 @@ groupmod -g $GROUP_ID jsonld
 
 su jsonld -c "git config --global --add safe.directory /home/jsonld/code"
 
-php -S localhost:8080 Test/router.php &
-
 exec runuser -u jsonld -- "$@"

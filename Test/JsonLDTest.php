@@ -11,12 +11,47 @@ namespace ML\JsonLD\Test;
 
 use ML\JsonLD\JsonLD;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Process;
 
 /**
  * This class contains additional tests regarding JsonLD-API.
  */
 final class JsonLDTest extends TestCase
 {
+    /**
+     * Holds the Symfony Process which represents a basic PHP webserver call.
+     */
+    public static Process $process;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$process = new Process(['php', '-S', 'localhost:8080', 'Test/router.php']);
+        self::$process->start();
+
+        // do not stop server automatically after a certain amount of time
+        self::$process->setTimeout(null);
+
+        // Wait until server responds
+        $start = time();
+        $connected = false;
+
+        while (time() - $start < 5) {
+            $fp = @fsockopen('localhost', 8080);
+            if ($fp) {
+                fclose($fp);
+                $connected = true;
+                break;
+            }
+            usleep(50000);
+        }
+
+        if (false === $connected) {
+            $msg = 'Could not start PHP webserver in time. Error output: ';
+            $msg .= self::$process->getErrorOutput();
+            throw new \RuntimeException($msg);
+        }
+    }
+
     /**
      * This function contains a reproducer for #7 as decribed here:
      * https://github.com/sweetrdf/json-ld/issues/5#issuecomment-4184490754
