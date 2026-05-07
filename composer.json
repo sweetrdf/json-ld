@@ -34,7 +34,11 @@
     },
     "autoload": {
         "psr-4": {
-            "ML\\JsonLD\\": "src/",
+            "ML\\JsonLD\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "ML\\JsonLD\\Test\\": "Test/"
         }
     }
